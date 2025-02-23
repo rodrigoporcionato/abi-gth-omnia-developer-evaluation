@@ -1,6 +1,9 @@
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using FluentValidation;
 
+/// <summary>
+/// Sale item validator class responsible for validating the sale item.
+/// </summary>
 public class SaleItemValidator : AbstractValidator<SaleItem>
 {
     public SaleItemValidator()
