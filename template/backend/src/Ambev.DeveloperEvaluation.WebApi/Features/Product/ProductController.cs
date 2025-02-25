@@ -1,8 +1,13 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Product.CreateProduct;
+using Ambev.DeveloperEvaluation.Application.Product.GetProduct;
 using Ambev.DeveloperEvaluation.Application.Users.CreateUser;
+using Ambev.DeveloperEvaluation.Application.Users.GetUser;
+using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.WebApi.Common;
+using Ambev.DeveloperEvaluation.WebApi.Features.Product.GetProduct;
 using Ambev.DeveloperEvaluation.WebApi.Features.Product.ProductFeature;
 using Ambev.DeveloperEvaluation.WebApi.Features.Users.CreateUser;
+using Ambev.DeveloperEvaluation.WebApi.Features.Users.GetUser;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +34,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Product
 
 
         [HttpPost]
-        [ProducesResponseType(typeof(ApiResponseWithData<CreateUserResponse>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ApiResponseWithData<ProductResponse>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateProduct([FromBody] ProductRequest request, CancellationToken cancellationToken)
         {
@@ -49,6 +54,29 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Product
                 Data = _mapper.Map<ProductResponse>(response)
             });
         }
+
+
+        [HttpGet()]
+        [ProducesResponseType(typeof(ApiResponseWithData<GetProductResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<List<GetProductResponse>>> GetProducts(CancellationToken cancellationToken)
+        {
+
+            var command = new GetProductCommand();
+
+            var response = await _mediator.Send(command, cancellationToken);
+
+            return Ok(new ApiResponseWithData<List<GetProductResponse>>
+            {
+                Success = true,
+                Message = "products retrieved successfully",
+                Data = _mapper.Map<List<GetProductResponse>>(response)
+            });
+        }
+
+
+
 
 
     }
