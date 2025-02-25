@@ -3,10 +3,13 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Ambev.DeveloperEvaluation.WebApi.Common;
-using Ambev.DeveloperEvaluation.WebApi.Features.Sale.SaleFeature;
+using Ambev.DeveloperEvaluation.WebApi.Features.Sale.CreateSale;
+
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Sale;
 
-
+/// <summary>
+/// responsibnle to create sales,(cart bu)
+/// </summary>
 public class SaleController : BaseController
 {
     private readonly IMediator _mediator;
@@ -21,9 +24,9 @@ public class SaleController : BaseController
     [ProducesResponseType(typeof(ApiResponseWithData<SaleResult>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> CreateSale([FromBody] SaleRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateSale([FromBody] CreateSaleRequest request, CancellationToken cancellationToken)
     {
-        var validator = new SaleRequestValidator();
+        var validator = new CreateSaleRequestValidator();
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
         if (!validationResult.IsValid)
