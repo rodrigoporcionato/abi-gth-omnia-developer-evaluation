@@ -3,17 +3,15 @@ using Ambev.DeveloperEvaluation.WebApi.Features.Product.ProductFeature;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Sale.CreateSale;
 
+/// <summary>
+/// responsible payload the sell items
+/// </summary>
 public class CreateSaleRequest
 {
-    public Guid UserId { get; set; }
+    public required Guid UserId { get; set; }
 
-    public List<SaleProductRequest> Products { get; set; }
-}
+    public required string Branch { get; set; }
 
-public class SaleProductRequest
-{
-
-    public Guid ProductId { get; set; }
-    public int Quantity { get; set; }
+    public required List<SaleProductRequest> Products { get; set; }
 }
 

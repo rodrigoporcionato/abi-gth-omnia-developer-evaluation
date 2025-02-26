@@ -13,7 +13,7 @@ public class SaleMappingProfile : Profile
 
         CreateMap<CreateSaleRequest, SaleCommand>()
            .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.UserId.ToString())) 
-           .ForMember(dest => dest.Branch, opt => opt.Ignore()) 
+           .ForMember(dest => dest.Branch, opt => opt.MapFrom(src=> src.Branch)) 
            .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Products)); 
 
         CreateMap<SaleProductRequest, SaleItem>()

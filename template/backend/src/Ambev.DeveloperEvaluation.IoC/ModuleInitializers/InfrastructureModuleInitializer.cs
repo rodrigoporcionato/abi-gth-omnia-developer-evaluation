@@ -1,4 +1,5 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Repositories;
+﻿using Ambev.DeveloperEvaluation.Cache;
+using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Ambev.DeveloperEvaluation.ORM;
 using Ambev.DeveloperEvaluation.ORM.Repositories;
 using Microsoft.AspNetCore.Builder;
@@ -15,6 +16,7 @@ public class InfrastructureModuleInitializer : IModuleInitializer
         builder.Services.AddScoped<DbContext>(provider => provider.GetRequiredService<DefaultContext>());
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<IProductRepository, ProductRepository>();
+        builder.Services.AddSingleton<IMemoryCacheService, MemoryCacheService>();
 
 
 

@@ -1,4 +1,5 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Repositories;
+﻿using Ambev.DeveloperEvaluation.Cache;
+using Ambev.DeveloperEvaluation.Domain.Repositories;
 using AutoMapper;
 using MediatR;
 
@@ -8,12 +9,16 @@ namespace Ambev.DeveloperEvaluation.Application.Product.GetProduct
     {
         private readonly IProductRepository _productRepo;
         private readonly IMapper _mapper;
+        private readonly IMemoryCacheService _memoryCache;
 
-        public GetProductHandler(IProductRepository productRepo, IMapper mapper)
+
+
+        public GetProductHandler(IProductRepository productRepo, IMapper mapper, IMemoryCacheService memoryCache)
         {
             
             _productRepo = productRepo;
             _mapper = mapper;
+            _memoryCache = memoryCache;
         }
 
         /// <summary>
@@ -24,8 +29,21 @@ namespace Ambev.DeveloperEvaluation.Application.Product.GetProduct
         /// <returns></returns>
         public async Task<List<GetProductResult>> Handle(GetProductCommand request, CancellationToken cancellationToken)
         {
-            //todo: add redis cache
+
+            var cacheKey = "prdchachekey";
+
+            var cachedProducts = await _memoryCache.GetAsync<List<GetProductResult>>(cacheKey);
+            if (cachedProducts != null)
+            {
+                return cachedProducts;
+            }
+
             var products = await _productRepo.GetAllAsync(cancellationToken);
+
+            var mappedProducts = _mapper.Map<List<GetProductResult>>(products);
+            await _memoryCache.SetAsync(cacheKey, mappedProducts, TimeSpan.FromMinutes(10));
+
+
             return _mapper.Map<List<GetProductResult>>(products);
         }
 

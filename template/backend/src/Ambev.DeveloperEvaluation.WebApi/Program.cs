@@ -43,6 +43,9 @@ public class Program
                 )
             );
 
+            builder.Services.AddMemoryCache();
+
+
             builder.Services.AddJwtAuthentication(builder.Configuration);
 
             builder.RegisterDependencies();
