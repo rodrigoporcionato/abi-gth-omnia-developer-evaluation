@@ -15,11 +15,11 @@
 ## Doctus about projet and how to staring,(PARA AVALIADOR AMBEV)
 
 
- 1 - [How to configure](.doc\how-configure.md)
+ 1 - [How to configure](/.doc/how-configure.md)
 
- 2 - [How to staring](.doc\how-execute.md)
+ 2 - [How to staring](/.doc/how-execute.md)
 
- 3 - [Unit tests](.doc\how-start-tests.md)
+ 3 - [Unit tests](/.doc/how-start-tests.md)
 
 
 
