@@ -8,17 +8,15 @@ using Xunit;
 
 namespace Ambev.DeveloperEvaluation.Unit.Domain.Validation;
 
-
-
 /// <summary>
-/// Scenatio validation with all posibilities
+/// Scenatio validation with all posibilities based on rules request by interview
 /// </summary>
 public class SaleTests
 {
     [Fact(DisplayName = "Scenatio validation with all posibilities")]
     public void CalculateTotal_Should_Correctly_Calculate_TotalAmount()
     {
-        // Arrange
+        //simulate all values with or without disconts
         var sale = new Sale
         {
             Items = new List<SaleItem>

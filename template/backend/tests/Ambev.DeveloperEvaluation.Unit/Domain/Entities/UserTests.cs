@@ -1,6 +1,7 @@
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Enums;
 using Ambev.DeveloperEvaluation.Unit.Domain.Entities.TestData;
+using FluentAssertions;
 using Xunit;
 
 namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities;
@@ -11,6 +12,66 @@ namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities;
 /// </summary>
 public class UserTests
 {
+
+    /// <summary>
+    /// coverate test sales command
+    /// </summary>
+    [Fact]
+    public void SaleCommand_ShouldInitializeCorrectly()
+    {
+        // Arrange
+        var command = new SaleCommand
+        {
+            Customer = "rodrigo porcionato",
+            Branch = "Main Branch",
+            Items = new List<SaleItem> { 
+                new SaleItem { Product = new Product 
+                { Title="test title" }, 
+                    Quantity = 2, 
+                    UnitPrice = 3} 
+            }
+        };
+
+        // Assert
+        command.Customer.Should().Be("rodrigo porcionato");
+        command.Branch.Should().Be("Main Branch");
+        command.Items.Should().HaveCount(1);
+        command.Items[0].Product.Title.Should().Be("test title");
+        command.Items[0].Quantity.Should().Be(2);
+        command.Items[0].UnitPrice.Should().Be(3);
+    }
+
+
+    /// <summary>
+    /// test coverage Sales result
+    /// </summary>
+    [Fact]
+    public void SaleResult_ShouldInitializeCorrectly()
+    {
+        // Arrange
+        var saleResult = new SaleResult
+        {
+            SaleNumber = 123,
+            Date = new DateTime(2024, 02, 26),
+            Customer = "rodrigo porcionato",
+            Branch = "Main Branch",
+            Items = new List<SaleItem>(),
+            TotalAmount = 150.50m
+        };
+
+        // Assert
+        saleResult.SaleNumber.Should().Be(123);
+        saleResult.Date.Should().Be(new DateTime(2024, 02, 26));
+        saleResult.Customer.Should().Be("rodrigo porcionato");
+        saleResult.Branch.Should().Be("Main Branch");
+        saleResult.Items.Should().BeEmpty();
+        saleResult.TotalAmount.Should().Be(150.50m);
+    }
+
+
+
+
+
     /// <summary>
     /// Tests that when a suspended user is activated, their status changes to Active.
     /// </summary>
@@ -34,14 +95,11 @@ public class UserTests
     [Fact(DisplayName = "User status should change to Suspended when suspended")]
     public void Given_ActiveUser_When_Suspended_Then_StatusShouldBeSuspended()
     {
-        // Arrange
         var user = UserTestData.GenerateValidUser();
         user.Status = UserStatus.Active;
 
-        // Act
         user.Suspend();
 
-        // Assert
         Assert.Equal(UserStatus.Suspended, user.Status);
     }
 

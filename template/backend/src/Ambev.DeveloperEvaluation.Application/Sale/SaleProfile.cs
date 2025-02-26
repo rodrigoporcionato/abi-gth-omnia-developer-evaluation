@@ -12,7 +12,9 @@ namespace Ambev.DeveloperEvaluation.Application.SaleProfile
     {
         public SaleProfile()
         {
-            CreateMap<Sale, SaleResult>();
+            CreateMap<Sale, SaleResult>()
+            .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.Customer.Email));
+
         }
     }
 }

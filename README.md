@@ -11,6 +11,18 @@
 - The repository must provide instructions on how to configure, execute and test the project
 - Documentation and overall organization will also be taken into consideration
 
+
+## Doctus about projet and how to staring,(PARA AVALIADOR AMBEV)
+
+
+ 1 - [How to configure](.doc\how-configure.md)
+
+ 2 - [How to staring](.doc\how-execute.md)
+
+ 3 - [Unit tests](.doc\how-start-tests.md)
+
+
+
 ## Use Case
 **You are a developer on the DeveloperStore team. Now we need to implement the API prototypes.**
 

@@ -29,6 +29,9 @@ This project serves as an evaluation for senior developer candidates. It is desi
 
 This comprehensive evaluation aims to assess both the technical proficiency and the broader software engineering skills necessary for a senior developer role.
 
+
+
+
 <br/>
 <div style="display: flex; justify-content: space-between;">
   <a href="../README.md">Previous: Read Me</a>
