@@ -5,7 +5,15 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sale.CreateSale;
 
 public class CreateSaleRequest
 {
-    public List<ProductRequest> Products { get; set; } = new();
+    public Guid UserId { get; set; }
 
+    public List<SaleProductRequest> Products { get; set; }
+}
+
+public class SaleProductRequest
+{
+
+    public Guid ProductId { get; set; }
+    public int Quantity { get; set; }
 }
 

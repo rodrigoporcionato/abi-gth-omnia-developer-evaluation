@@ -78,20 +78,12 @@ public class Program
             app.MapControllers();
 
 
-
-            ///create database and run migrations automatically. It is no recomended to use this in production, but since it is a evaluation adn I want to make it easier for the evaluator, I will use it.
-       
+            //feed table product..necessary to run dotnet ef update first!
             using (var scope = app.Services.CreateScope())
             {
-                Log.Information("Applying migrations");
                 var dbContext = scope.ServiceProvider.GetRequiredService<DefaultContext>();
-                dbContext.Database.Migrate();
-                Log.Information("Migrations applied");
-
-                SeedDatabase(dbContext); 
-
+                SeedDatabaseAsync(dbContext).GetAwaiter().GetResult(); 
             }
-
 
             app.Run();
         }
@@ -109,33 +101,44 @@ public class Program
     /// seed products from fakestoreapi and add to database. Used for the first time running the application
     /// </summary>
     /// <param name="dbContext"></param>
-    private static void SeedDatabase(DefaultContext dbContext)
-    {        
-        if (!dbContext.Products.Any())
+    private static async Task SeedDatabaseAsync(DefaultContext dbContext)
+    {
+        if (!await dbContext.Products.AnyAsync())
         {
-            var response =  client.GetStringAsync("https://fakestoreapi.com/products").Result;
-            var products = JsonConvert.DeserializeObject<List<ProductRequest>>(response);
-
-            if (products!=null && products.Count != 0)
+            try
             {
-                var productsToInsert = products.Select(p => new Product
+                var response = await client.GetStringAsync("https://fakestoreapi.com/products");
+                var products = JsonConvert.DeserializeObject<List<ProductRequest>>(response);
+
+                if (products != null && products.Count > 0)
                 {
-                    Title = p.Title,
-                    Description = p.Description,
-                    Image = p.Image,
-                    Price = p.Price,
-                    category = p.Category,
-                    Rating = (decimal)p.Rating.Rate,
-                    RatingCount = p.Rating.Count
-                }).ToList();
+                    var productsToInsert = products.Select(p => new Product
+                    {
+                        Title = p.Title,
+                        Description = p.Description,
+                        Image = p.Image,
+                        Price = p.Price,
+                        category = p.Category,
+                        Rating = (decimal)p.Rating.Rate,
+                        RatingCount = p.Rating.Count
+                    }).ToList();
 
-                dbContext.Products.AddRange(productsToInsert);
-                dbContext.SaveChanges();
-
-            }         
-
+                    await dbContext.Products.AddRangeAsync(productsToInsert);
+                    await dbContext.SaveChangesAsync();
+                    Log.Information($"{productsToInsert.Count} products added to the database.");
+                }
+                else
+                {
+                    Log.Warning("No products retrieved from FakeStoreAPI.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Error while seeding the database.");
+            }
         }
     }
+
 
 
 }

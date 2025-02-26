@@ -1,5 +1,10 @@
 
 
+using Ambev.DeveloperEvaluation.Application.Users.GetUser;
+using Ambev.DeveloperEvaluation.Common.Security;
+using Ambev.DeveloperEvaluation.Domain.Entities;
+using Ambev.DeveloperEvaluation.Domain.Repositories;
+using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -9,28 +14,55 @@ using Microsoft.Extensions.Logging;
 /// </summary>
 public class SaleHandler : IRequestHandler<SaleCommand, SaleResult>
 {
-    public static List<SaleResult> Sales = new();
     private static int _saleNumber = 1;
     private readonly ILogger<SaleHandler> _logger;
 
-    public SaleHandler(ILogger<SaleHandler> logger)
+    private readonly IProductRepository _productRepository;
+    private readonly IUserRepository _userRepository;
+    private readonly IMapper _mapper;
+
+
+    public SaleHandler(ILogger<SaleHandler> logger, IProductRepository productRepository, IUserRepository userRepository, IMapper mapper)
     {
         _logger = logger;
+        _productRepository = productRepository;
+        _userRepository = userRepository;
+        _mapper = mapper;
+
     }
 
-    public Task<SaleResult> Handle(SaleCommand request, CancellationToken cancellationToken)
+    public async Task<SaleResult> Handle(SaleCommand request, CancellationToken cancellationToken)
     {
-        var sale = new SaleResult
+
+        //todo: validator here!
+
+
+        ///find products by iods
+        var prodIds = request.Items.Select(i => i.ProductId).ToList();
+        var products = await _productRepository.GetByIdsAsync(prodIds, cancellationToken);
+        var productDict = products.ToDictionary(p => p.Id);
+
+        foreach (var item in request.Items)
+        {
+            if (!productDict.TryGetValue(item.ProductId, out var product))
+            {
+                throw new InvalidOperationException($"Product with id {item.ProductId} not found");
+            }
+            item.Product = product;
+        }
+
+        //todo: save sales to database
+        var sale = new Sale
         {
             SaleNumber = _saleNumber++,
             Date = DateTime.UtcNow,
-            Customer = request.Customer,
+            Customer = new(),
             Branch = request.Branch,
             Items = request.Items,
         };
         sale.CalculateTotal();
-        Sales.Add(sale);
+
         _logger.LogInformation($"SaleCreated: {sale.SaleNumber}");
-        return Task.FromResult(sale);
+        return _mapper.Map<SaleResult>(sale);        
     }
 }
