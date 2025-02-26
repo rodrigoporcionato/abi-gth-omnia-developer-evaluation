@@ -1,4 +1,3 @@
-Claro! Aqui está o guia em formato Markdown (MD) que você pode adicionar ao seu repositório Git:
 
 ```markdown
 # Guide to Adding and Applying Migrations with Entity Framework Core
