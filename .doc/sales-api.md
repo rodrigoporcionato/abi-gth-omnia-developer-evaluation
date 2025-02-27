@@ -110,9 +110,6 @@ The system returns appropriate validation errors if the business rules are viola
 | Scenario | Response Code | Message |
 |----------|--------------|---------|
 | More than 20 identical items | `400 Bad Request` | "Cannot sell more than 20 identical items." |
-| Product not found | `404 Not Found` | "Product with id {productId} not found" |
+| Product not found | `404 Not Found` | "sale item with id {productId} not found" |
 | Invalid request format | `400 Bad Request` | "Validation failed." |
-
-## Summary
-This endpoint allows customers to purchase products while enforcing discount rules and quantity restrictions. The `SaleHandler` ensures proper validation and logging, and the business rules are encapsulated within the `Sale` entity to maintain a clean architecture.
 
