@@ -1,6 +1,7 @@
 
 
 
+using Ambev.DeveloperEvaluation.Application.Sale.CreateSale;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using AutoMapper;
 
@@ -21,7 +22,5 @@ public class SaleMappingProfile : Profile
             .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity));
 
 
-        //CreateMap<CreateSaleRequest, SaleCommand>();
-        //CreateMap<CreateSaleResponse, CreateSaleResponse>();
     }
 }

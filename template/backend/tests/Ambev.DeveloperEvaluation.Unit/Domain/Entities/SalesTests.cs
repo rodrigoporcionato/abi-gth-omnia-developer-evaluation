@@ -2,8 +2,8 @@
 using FluentAssertions;
 using Ambev.DeveloperEvaluation.Unit.Domain.Entities.TestData;
 using AutoMapper;
-using Ambev.DeveloperEvaluation.Application.SaleProfile;
 using Ambev.DeveloperEvaluation.Domain.Entities;
+using Ambev.DeveloperEvaluation.Application.Sale.CreateSale;
 namespace Ambev.DeveloperEvaluation.Unit.Domain.Entities;
 
 

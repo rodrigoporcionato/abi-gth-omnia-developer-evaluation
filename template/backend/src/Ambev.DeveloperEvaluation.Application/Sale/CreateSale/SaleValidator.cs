@@ -1,9 +1,8 @@
 
 
 
-using Ambev.DeveloperEvaluation.Domain.Entities;
 using FluentValidation;
-using Microsoft.AspNetCore.Identity;
+namespace Ambev.DeveloperEvaluation.Application.Sale.CreateSale;
 
 public class SaleValidator : AbstractValidator<SaleCommand>, ISaleValidator
 {

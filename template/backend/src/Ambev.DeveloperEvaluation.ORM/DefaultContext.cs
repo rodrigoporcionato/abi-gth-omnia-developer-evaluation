@@ -22,6 +22,13 @@ public class DefaultContext : DbContext
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         base.OnModelCreating(modelBuilder);
+
+        //set relation ship for sales and items
+        modelBuilder.Entity<Sale>()
+               .HasMany(s => s.Items)
+               .WithOne()
+               .HasForeignKey(si => si.SaleId)
+               .OnDelete(DeleteBehavior.Cascade);
     }
 }
 public class YourDbContextFactory : IDesignTimeDbContextFactory<DefaultContext>
