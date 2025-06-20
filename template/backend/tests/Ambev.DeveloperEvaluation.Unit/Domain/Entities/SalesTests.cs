@@ -65,6 +65,9 @@ public class SaleTests
             else
                 item.Discount.Should().Be(0m);
         }
+
+        // Validate that the calculated TotalAmount matches the sum of item totals
+        sale.TotalAmount.Should().Be(sale.Items.Sum(i => i.Total));
     }
 
     /// <summary>
